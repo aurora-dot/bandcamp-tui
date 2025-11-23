@@ -1,44 +1,23 @@
-#[derive(Debug, Clone)]
-pub struct Tag {
-    name: String,
-}
+use crate::scraper::Scraper;
+use crate::state::{Album, Artist, Player, Track};
+use url::Url;
 
 #[derive(Debug, Clone)]
-pub struct Track {
-    id: u16,
-    title: String,
-    cover: Url,
-    lyrics: String,
-    tags: Vec<Tag>,
+pub enum PageContent {
+    Artist(Artist),
+    Album(Album),
+    Track(Track),
+}
+
+pub struct Page {
     url: Url,
+    content: PageContent,
 }
 
-#[derive(Debug, Clone)]
-pub struct Album {
-    id: u16,
-    title: String,
-    cover: Url,
-    tracks: Vec<Track>,
-    tags: Vec<Tag>,
-    credits: String,
-    url: Url,
+pub struct Client {
+    player: Player,
+    scraper: Scraper,
+    current_page: Page,
+    forward: Vec<Page>,
+    back: Vec<Page>,
 }
-
-#[derive(Debug, Clone)]
-pub struct Artist {
-    id: u16,
-    name: String,
-    albums: Vec<Album>,
-    url: Url,
-}
-
-#[derive(Debug, Clone)]
-pub struct Player {
-    album: Album,
-    track: Track,
-    is_playing: bool,
-    position: Duration,
-    stream_url: Url,
-}
-
-// we then use above structures to turn a requested page into terminal view
